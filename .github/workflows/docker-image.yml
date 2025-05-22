@@ -30,3 +30,6 @@ jobs:
        push: true
        platforms: linux/amd64
        tags: akhileshselvaraj/tasky:latest
+       provenance: false
+       build-args: |
+          CGO_ENABLED=0
