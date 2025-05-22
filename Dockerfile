@@ -5,8 +5,14 @@ WORKDIR /go/src/tasky
 COPY go.mod go.sum ./
 RUN go mod download
 COPY . .
-RUN echo "Listing contents..." && ls -lah 
-RUN echo "Running go build..." && CGO_ENABLED=0 GOOS=linux GOARCH=amd64 go build -v -x -o /go/src/tasky/tasky
+# Show directory contents to verify files are copied
+RUN echo "===== FILES IN /go/src/tasky =====" && ls -lah /go/src/tasky
+
+# Show main.go contents (to confirm it exists)
+RUN echo "===== CONTENTS OF main.go =====" && cat /go/src/tasky/main.go || echo "main.go not found!"
+
+# Run go build in its own step to capture detailed logs
+RUN echo "===== RUNNING GO BUILD =====" && CGO_ENABLED=0 GOOS=linux GOARCH=amd64 go build -v -x -o /go/src/tasky/tasky
 
 FROM alpine:3.17.0 AS release
 
